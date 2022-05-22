@@ -1,6 +1,10 @@
 import 'package:blog/controllers/api_helper.dart';
+import 'package:blog/views/article_details.dart';
 import 'package:blog/views/article_form.dart';
 import 'package:blog/views/articles.dart';
+import 'package:blog/views/home.dart';
+import 'package:blog/views/login.dart';
+import 'package:blog/views/signup.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -27,7 +31,7 @@ class _Start1State extends State<Start1> {
               child: Center(
                 child: Container(
                   margin: const EdgeInsets.all(30),
-                  child: Image.asset("assets/images/IMAGETILES.png"),/*Column(
+                  child: Image.asset("assets/images/start1_image.png"),/*Column(
                     children: [
                       Expanded(
                         flex: 1,

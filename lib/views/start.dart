@@ -13,7 +13,7 @@ class _StartState extends State<Start> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
-        child: Container(child: Image.asset('assets/images/Rectangle 886.png',),),
+        child: Container(child: Image.asset('assets/images/logo.png',),),
       ),
     );
   }
