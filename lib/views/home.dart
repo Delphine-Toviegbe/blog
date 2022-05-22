@@ -1,7 +1,9 @@
 import 'package:blog/controllers/api_helper.dart';
 import 'package:blog/models/article.dart';
+import 'package:blog/models/category.dart';
 import 'package:blog/models/user.dart';
 import 'package:blog/views/article_form.dart';
+import 'package:blog/views/articles.dart';
 import 'package:blog/views/nav_bar.dart';
 import 'package:flutter/material.dart';
 
@@ -15,12 +17,18 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   List<Article> _articles = [];
   User? _current_user;
+  bool _isLoading = true;
+  List<Category>? _categories;
+
   Future<void> _loadData() async {
-    var data = await APIHelper.getArticles();
+    var articlesData = await APIHelper.getArticles();
+    var categoriesData = await APIHelper.getCategories();
     var userData = await APIHelper.currentUser();
     setState(() {
-      _articles = data;
+      _articles = articlesData;
+      _categories = categoriesData;
       _current_user = userData;
+      _isLoading = false;
     });
   }
 
@@ -34,7 +42,9 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
+      body: _isLoading ? const Center(
+        child: CircularProgressIndicator(),
+      ) : SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(10.0),
           child: Column(
@@ -71,170 +81,68 @@ class _HomeState extends State<Home> {
 
               Container(
                 height: 50,
-                child: ListView(
+                child: ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  children: <Widget>[
-
-                    TextButton(
-                      style: TextButton.styleFrom(
-                        textStyle: const TextStyle(fontSize: 20),
+                  itemCount: _categories!.length,
+                  itemBuilder: (context,index)=>Row(
+                    children: [
+                      TextButton(
+                        style: TextButton.styleFrom(
+                          textStyle: const TextStyle(fontSize: 20),
+                        ),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => Articles(category: _categories![index])),
+                          );
+                        },
+                        child: Text(_categories![index].name!, style: TextStyle(color: Colors.black),),
                       ),
-                      onPressed: () {},
-                      child: const Text('Science', style: TextStyle(color: Colors.black),),
-                    ),
-                    SizedBox(width: 20.0,),
-                    TextButton(
-                      style: TextButton.styleFrom(
-                        textStyle: const TextStyle(fontSize: 20),
-                      ),
-                      onPressed: () {},
-                      child: const Text('Health', style: TextStyle(color: Colors.black),),
-                    ),
-                    SizedBox(width: 20.0,),
-                    TextButton(
-                      style: TextButton.styleFrom(
-                        textStyle: const TextStyle(fontSize: 20),
-                      ),
-                      onPressed: () {},
-                      child: const Text('Sport', style: TextStyle(color: Colors.black),),
-                    ),
-                    SizedBox(width: 20.0,),
-                    TextButton(
-                      style: TextButton.styleFrom(
-                        textStyle: const TextStyle(fontSize: 20),
-                      ),
-                      onPressed: () {},
-                      child: const Text('Politique', style: TextStyle(color: Colors.black),),
-                    ),
-                    SizedBox(width: 20.0,),
-                    TextButton(
-                      style: TextButton.styleFrom(
-                        textStyle: const TextStyle(fontSize: 20),
-                      ),
-                      onPressed: () {},
-                      child: const Text('Technologie', style: TextStyle(color: Colors.black),),
-                    ),
-                    SizedBox(width: 20.0,),
-                    TextButton(
-                      style: TextButton.styleFrom(
-                        textStyle: const TextStyle(fontSize: 20),
-                      ),
-                      onPressed: () {},
-                      child: const Text('Cooking', style: TextStyle(color: Colors.black),),
-                    ),
-                    SizedBox(width: 20.0,),
-                    TextButton(
-                      style: TextButton.styleFrom(
-                        textStyle: const TextStyle(fontSize: 20),
-                      ),
-                      onPressed: () {},
-                      child: const Text('Sport', style: TextStyle(color: Colors.black),),
-                    ),
-                  ],
+                      SizedBox(width: 20),
+                    ],
+                  ),
                 ),
               ),
 
               Container(
                 height: 300,
-                child: ListView(
+                child: ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  children: <Widget>[
-                    Container(
-                      child: Stack(
-                        alignment: Alignment.bottomCenter,
-                        children: [
-                          Container(
-                            height: 350,
-                            width: 250,
-                            child:  Image.asset('assets/images/category_image1.png',
-                              height: 100,
-                              width: 100,
-                              fit: BoxFit.fitWidth
-                            ),
-                          ),
-                          Container(
-                            width: 200,
-                            height: 50,
-                            child:Text("Technologie",style: TextStyle(color:Colors.blue,fontSize: 20),textAlign: TextAlign.center,)
-                            ,
-                          )
-                        ],
-                      ),
-                    ),
-                    SizedBox(width: 50.0,),
-                    Container(
-                      child: Stack(
-                        alignment: Alignment.bottomCenter,
-                        children: [
-                          Container(
-                            height: 350,
-                            width: 250,
-                            child:  Image.asset('assets/images/category_image1.png',
+                  itemCount: _categories!.length,
+                  itemBuilder: (context,index)=>Row(
+                    children: [
+                      TextButton(
+                        onPressed: (){
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => Articles(category: _categories![index])),
+                          );
+                        },
+                        child: Stack(
+                          alignment: Alignment.bottomCenter,
+                          children: [
+                            Container(
+                              height: 350,
+                              width: 250,
+                              child:  Image.asset('assets/images/category_image1.png',
                                 height: 100,
                                 width: 100,
                                 fit: BoxFit.fitWidth
+                              ),
                             ),
-                          ),
-                          Container(
-                            width: 200,
-                            height: 50,
-                            child:Text("Technologie",style: TextStyle(color:Colors.blue,fontSize: 20),textAlign: TextAlign.center,)
-                            ,
-                          )
-                        ],
+                            Container(
+                              width: 200,
+                              height: 50,
+                              child:Text(_categories![index].name!,style: TextStyle(color:Colors.white,fontSize: 20),textAlign: TextAlign.center,)
+                            )
+                          ],
+                        ),
                       ),
-                    ),
-                    SizedBox(width: 50.0,),
-                    Container(
-                      child: Stack(
-                        alignment: Alignment.bottomCenter,
-                        children: [
-                          Container(
-                            height: 350,
-                            width: 250,
-                            child:  Image.asset('assets/images/category_image1.png',
-                                height: 100,
-                                width: 100,
-                                fit: BoxFit.fitWidth
-                            ),
-                          ),
-                          Container(
-                            width: 200,
-                            height: 50,
-                            child:Text("Technologie",style: TextStyle(color:Colors.blue,fontSize: 20),textAlign: TextAlign.center,)
-                            ,
-                          )
-                        ],
-                      ),
-                    ),
-                    SizedBox(width: 50.0,),
-                    Container(
-                      child: Stack(
-                        alignment: Alignment.bottomCenter,
-                        children: [
-                          Container(
-                            height: 350,
-                            width: 250,
-                            child:  Image.asset('assets/images/category_image1.png',
-                                height: 100,
-                                width: 100,
-                                fit: BoxFit.fitWidth
-                            ),
-                          ),
-                          Container(
-                            width: 200,
-                            height: 50,
-                            child:Text("Technologie",style: TextStyle(color:Colors.blue,fontSize: 20),textAlign: TextAlign.center,)
-                            ,
-                          )
-                        ],
-                      ),
-                    ),
-                  ],
+                      SizedBox(width: 20.0),
+                    ],
+                  )
                 ),
               ),
-
-              SizedBox(height: 20.0),
 
               Container(
                   margin: EdgeInsets.only(top: 10.0),
@@ -243,15 +151,19 @@ class _HomeState extends State<Home> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                            Text('Last articles'),
-                            Text('more'),
+                            Text('Last articles', style: TextStyle(fontSize: 18)),
+                            TextButton(
+                              onPressed: (){
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => Articles()),
+                                );
+                              },
+                              child: Text('more', style: TextStyle(fontSize: 18))
+                            ),
                           ],
                         )]
                   )
-              ),
-
-              SizedBox(
-                height: 40.0,
               ),
 
               Container(
@@ -410,6 +322,18 @@ class _HomeState extends State<Home> {
         ),
       ),
       bottomNavigationBar: NavBar(selectedIndex: 0),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => ArticleForm()),
+          );
+        },
+        elevation:5.0,
+        backgroundColor: const Color(0xFFC00B2C),
+        child: const Icon(Icons.add),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterDocked
     );
   }
 }

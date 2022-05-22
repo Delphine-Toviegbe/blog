@@ -142,10 +142,20 @@ class APIHelper {
     if (response.statusCode == 200) {
       var result = json.decode(response.body);
       user = User.fromJson(result);
-    } else {
-      throw Exception('Failed to load articles');
     }
     return user;
+  }
+  static Future<void> logout() async {
+    final prefs = await SharedPreferences.getInstance();
+    http.post(
+      Uri.parse('http://flutterapp.pythonanywhere.com/accounts/auth/logout/'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        "Authorization": "Bearer "+prefs.getString("refresh")!
+      },
+      body: jsonEncode({"refresh": prefs.getString("refresh")!}),
+    );
+    prefs.setString("refresh", "");
   }
 
 

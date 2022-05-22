@@ -1,5 +1,10 @@
+import 'package:blog/controllers/api_helper.dart';
+import 'package:blog/models/user.dart';
 import 'package:blog/views/articles.dart';
 import 'package:blog/views/home.dart';
+import 'package:blog/views/login.dart';
+import 'package:blog/views/profile.dart';
+import 'package:blog/views/signup.dart';
 import 'package:flutter/material.dart';
 
 class NavBar extends StatefulWidget {
@@ -13,10 +18,27 @@ class NavBar extends StatefulWidget {
 class _NavBarState extends State<NavBar> {
   final Color primaryColor = Color(0xFFC00B2C);
   final Color inputColor = Color(0xFFDDDDDD);
+  User? _current_user;
+  bool _isLoading = true;
+  Future<void> _loadData() async {
+    var userData = await APIHelper.currentUser();
+    setState(() {
+      _current_user = userData;
+      _isLoading = false;
+    });
+  }
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _loadData();
+  }
+  @override
   Widget build(BuildContext context) {
-    return BottomNavigationBar(
+    return _isLoading ? const Center(
+      child: CircularProgressIndicator(),
+    ) : BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         currentIndex: widget.selectedIndex,
         backgroundColor: Colors.white,
@@ -41,35 +63,59 @@ class _NavBarState extends State<NavBar> {
             );
           }
           else if(index==2){
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => Home()),
-            );
+            if(_current_user!=null) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Profile()),
+              );
+            }
+            else{
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Signup()),
+              );
+            }
           }
           else if(index==3){
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => Home()),
-            );
+            if(_current_user!=null) {
+              APIHelper.logout();
+              _loadData();
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Home()),
+              );
+            }
+            else{
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Login()),
+              );
+            }
           }
         },
         //landscapeLayout: BottomNavigationBarLandscapeLayout.spread,
-        items: const [
-          BottomNavigationBarItem(
+        items: [
+          const BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Home',
           ),
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             icon: Icon(Icons.menu_book),
             label: 'Article',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            label: 'Search',
+          _current_user!=null ? const BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
+          ) : const BottomNavigationBarItem(
+            icon: Icon(Icons.app_registration),
+            label: 'Sign up',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.menu),
-            label: 'Menu',
+          _current_user!=null ? const BottomNavigationBarItem(
+            icon: Icon(Icons.logout),
+            label: 'Log out',
+          ) : const BottomNavigationBarItem(
+            icon: Icon(Icons.login),
+            label: 'Login',
           )
         ]
     );

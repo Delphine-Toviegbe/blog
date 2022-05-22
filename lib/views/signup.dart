@@ -1,3 +1,4 @@
+import 'package:blog/views/nav_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:blog/views/login.dart';
 
@@ -41,9 +42,9 @@ class _SignupState extends State<Signup> {
                           children: <Widget>[
                             Container(
                               decoration: BoxDecoration(
-                                  color: Theme.of(context).primaryColor,
+                                  color: const Color(0xFFC00B2C),
                                   border: Border.all(
-                                      color: Theme.of(context).primaryColor),
+                                      color: const Color(0xFFC00B2C)),
                                   borderRadius: BorderRadius.only(
                                       topRight: Radius.circular(30),
                                       topLeft: Radius.circular(35))
@@ -150,7 +151,7 @@ class _SignupState extends State<Signup> {
                                             shape: RoundedRectangleBorder(
                                                 borderRadius: BorderRadius.circular(10)
                                             ),
-                                            primary: Theme.of(context).primaryColor,
+                                            primary: const Color(0xFFC00B2C),
                                             minimumSize: const Size.fromHeight(50),
 
                                           ),
@@ -170,7 +171,7 @@ class _SignupState extends State<Signup> {
                                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                     children: <Widget>[
                                       Text('Forgot your pasword'),
-                                      Text('Reset here', style: TextStyle(color: Theme.of(context).primaryColor),)
+                                      Text('Reset here', style: TextStyle(color: Color(0xFFC00B2C)),)
                                     ],
                                   ),
                                   Container(
@@ -211,7 +212,8 @@ class _SignupState extends State<Signup> {
 
           )
           ,
-        )
+        ),
+      bottomNavigationBar: NavBar(selectedIndex: 2),
     );
   }
 }

@@ -1,12 +1,15 @@
 import 'package:blog/controllers/api_helper.dart';
 import 'package:blog/models/article.dart';
+import 'package:blog/models/category.dart';
 import 'package:blog/models/user.dart';
 import 'package:blog/views/article_form.dart';
 import 'package:blog/views/nav_bar.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class Articles extends StatefulWidget {
-  const Articles({Key? key}) : super(key: key);
+  Category? category;
+  Articles({Key? key, this.category}) : super(key: key);
 
   @override
   _ArticlesState createState() => _ArticlesState();
@@ -15,12 +18,19 @@ class Articles extends StatefulWidget {
 class _ArticlesState extends State<Articles> {
   List<Article> _articles = [];
   User? _current_user;
+  bool _isLoading = true;
   Future<void> _loadData() async {
-    var data = await APIHelper.getArticles();
+    var data;
+    if(widget.category!=null){
+      data = widget.category!.articles;
+    }else{
+      data = await APIHelper.getArticles();
+    }
     var userData = await APIHelper.currentUser();
     setState(() {
       _articles = data;
       _current_user = userData;
+      _isLoading = false;
     });
   }
 
@@ -33,7 +43,9 @@ class _ArticlesState extends State<Articles> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
+      body: _isLoading ? const Center(
+        child: CircularProgressIndicator(),
+      ) : SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(10.0),
           child: Column(
@@ -67,7 +79,15 @@ class _ArticlesState extends State<Articles> {
               SizedBox(
                 height: 20.0,
               ),
-              Container(
+              widget.category!=null ? Text("The articles of categoey : "+widget.category!.name!, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)) : Text("All articles", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              _articles.length==0 ? Column(
+                children: [
+                  SizedBox(
+                    height: 200,
+                  ),
+                  Center(child: Text("No article for this category")),
+                ],
+              ) : Container(
                 child: ListView.builder(
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:blog/models/article.dart';
 import 'package:blog/models/category.dart';
 import 'package:blog/views/articles.dart';
+import 'package:blog/views/nav_bar.dart';
 import 'package:blog/views/start1.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart' hide Text;
@@ -80,7 +81,7 @@ class _ArticleFormState extends State<ArticleForm> {
 
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const Articles()),
+                    MaterialPageRoute(builder: (context) => Articles()),
                   );
                 }
               },
@@ -149,6 +150,7 @@ class _ArticleFormState extends State<ArticleForm> {
           ),
         ),
       ),
+      bottomNavigationBar: NavBar(selectedIndex: 1),
     );
   }
 }

@@ -160,7 +160,7 @@ class _Start1State extends State<Start1> {
                               onTap: () async {
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => Articles()),
+                                  MaterialPageRoute(builder: (context) => Home()),
                                 );
                               },
                               child: Container(

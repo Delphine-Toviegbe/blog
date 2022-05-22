@@ -1,3 +1,7 @@
+import 'package:blog/controllers/api_helper.dart';
+import 'package:blog/models/user.dart';
+import 'package:blog/views/home.dart';
+import 'package:blog/views/nav_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:blog/views/signup.dart';
 
@@ -13,6 +17,10 @@ class _LoginState extends State<Login> {
   final _emailController = new TextEditingController();
   String _password = '';
   bool _isObscure = true;
+
+  void _login(User user) async {
+    await APIHelper.login(user);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,9 +47,9 @@ class _LoginState extends State<Login> {
                           children: <Widget>[
                             Container(
                               decoration: BoxDecoration(
-                                  color: Theme.of(context).primaryColor,
+                                  color: const Color(0xFFC00B2C),
                                   border: Border.all(
-                                      color: Theme.of(context).primaryColor),
+                                      color: const Color(0xFFC00B2C)),
                                   borderRadius: BorderRadius.only(
                                       topRight: Radius.circular(30),
                                       topLeft: Radius.circular(35))
@@ -95,7 +103,7 @@ class _LoginState extends State<Login> {
                                         children: [
                                           TextFormField(
                                             controller: _emailController,
-                                            keyboardType: TextInputType.name,
+                                            keyboardType: TextInputType.emailAddress,
                                             decoration: InputDecoration(
                                                 labelText: "Email"
                                             ),
@@ -136,13 +144,17 @@ class _LoginState extends State<Login> {
                                             shape: RoundedRectangleBorder(
                                                 borderRadius: BorderRadius.circular(10)
                                             ),
-                                            primary: Theme.of(context).primaryColor,
+                                            primary: const Color(0xFFC00B2C),
                                             minimumSize: const Size.fromHeight(50),
 
                                           ),
                                           onPressed: (){
                                             if(_formKey.currentState!.validate()){
-                                              /* Appelle une méthode Dara*/
+                                              _login(User(email: _emailController.text, password: _password));
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(builder: (context) => Home()),
+                                              );
                                             }
                                           },
                                           child: Text("Login")
@@ -156,7 +168,7 @@ class _LoginState extends State<Login> {
                                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                     children: <Widget>[
                                       Text('Forgot your pasword'),
-                                      Text('Reset here', style: TextStyle(color: Theme.of(context).primaryColor),)
+                                      Text('Reset here', style: TextStyle(color: Color(0xFFC00B2C)),)
                                     ],
                                   ),
                                   Container(
@@ -198,7 +210,8 @@ class _LoginState extends State<Login> {
 
           )
           ,
-        )
+        ),
+      bottomNavigationBar: NavBar(selectedIndex: 3),
     );
   }
 }
