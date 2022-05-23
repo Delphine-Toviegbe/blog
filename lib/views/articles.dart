@@ -248,7 +248,7 @@ class _ArticlesState extends State<Articles> {
         ),
       ),
       bottomNavigationBar: NavBar(selectedIndex: 1),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: (_current_user != null && _current_user!.admin == true) ? FloatingActionButton(
         onPressed: () {
           Navigator.push(
             context,
@@ -258,7 +258,7 @@ class _ArticlesState extends State<Articles> {
         elevation:5.0,
         backgroundColor: const Color(0xFF8D001F),
         child: const Icon(Icons.add),
-      ),
+      ) : Container(),
       floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterDocked
     );
   }

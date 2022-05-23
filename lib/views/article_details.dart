@@ -163,7 +163,7 @@ class _ArticleDetailsState extends State<ArticleDetails> {
                                     borderRadius: BorderRadius.circular(25.0),
                                     color: Colors.black45,
                                   ),
-                                  child: Text("Veuillez vous connectez afin de pouvoir liker et commenter les artiles.", style: TextStyle(color: Colors.white),),
+                                  child: Text("Veuillez vous connectez afin de pouvoir liker et commenter les articles.", style: TextStyle(color: Colors.white),),
                                 ),
                                 gravity: ToastGravity.BOTTOM,
                                 toastDuration: Duration(seconds: 5),
@@ -206,7 +206,7 @@ class _ArticleDetailsState extends State<ArticleDetails> {
                                   borderRadius: BorderRadius.circular(25.0),
                                   color: Colors.black45,
                                 ),
-                                child: Text("Veuillez vous connectez afin de pouvoir ajouter des artiles comme favorie.", style: TextStyle(color: Colors.white),),
+                                child: Text("Veuillez vous connectez afin de pouvoir ajouter des articles comme favorie.", style: TextStyle(color: Colors.white),),
                               ),
                               gravity: ToastGravity.BOTTOM,
                               toastDuration: Duration(seconds: 5),
@@ -330,9 +330,12 @@ class _ArticleDetailsState extends State<ArticleDetails> {
                                       SizedBox(
                                         width: 8.0,
                                       ),
-                                      Text(_comments[index].user!.name!,
-                                        style: TextStyle(
-                                          fontSize: 15.0, fontWeight: FontWeight.w400
+                                      Container(
+                                        width: 50,
+                                        child: Text(_comments[index].user!.name!,
+                                          style: TextStyle(
+                                            fontSize: 15.0, fontWeight: FontWeight.w400
+                                          ),
                                         ),
                                       ),
                                     ],

@@ -30,34 +30,49 @@ class APIHelper {
 
   //Article methods
   static createArticle(Article article) async {
+
+    var refresh = null;
     final prefs = await SharedPreferences.getInstance();
+    if(prefs.getString("refresh") != null){
+      refresh = prefs.getString("refresh");
+    }
     http.post(
       Uri.parse('http://flutterapp.pythonanywhere.com/blogs/article/'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        "Authorization": "Bearer "+prefs.getString("refresh")!
+        "Authorization": "Bearer "+refresh.toString()
       },
       body: jsonEncode(article.toJson()),
     );
   }
   static updateArticle(Article article) async {
+
+    var refresh = null;
     final prefs = await SharedPreferences.getInstance();
+    if(prefs.getString("refresh") != null){
+      refresh = prefs.getString("refresh");
+    }
     http.patch(
       Uri.parse('http://flutterapp.pythonanywhere.com/blogs/article/'+article.id.toString()+'/'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        "Authorization": "Bearer "+prefs.getString("refresh")!
+        "Authorization": "Bearer "+refresh.toString()
       },
       body: jsonEncode(article.toJson()),
     );
   }
   static deleteArticle(Article article) async {
+
+    var refresh = null;
     final prefs = await SharedPreferences.getInstance();
+    if(prefs.getString("refresh") != null){
+      refresh = prefs.getString("refresh");
+    }
     http.delete(
       Uri.parse('http://flutterapp.pythonanywhere.com/blogs/article/'+article.id.toString()+'/'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        "Authorization": "Bearer "+prefs.getString("refresh")!
+        "Authorization": "Bearer "+refresh.toString()
       },
     );
   }
@@ -89,12 +104,17 @@ class APIHelper {
 
   //Comment methods
   static Future<void> createComment(Comment comment) async {
+
+    var refresh = null;
     final prefs = await SharedPreferences.getInstance();
+    if(prefs.getString("refresh") != null){
+      refresh = prefs.getString("refresh");
+    }
     http.post(
       Uri.parse('http://flutterapp.pythonanywhere.com/blogs/comment/'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        "Authorization": "Bearer "+prefs.getString("refresh")!
+        "Authorization": "Bearer "+refresh.toString()
       },
       body: jsonEncode(comment.toJson()),
     );
@@ -184,12 +204,16 @@ class APIHelper {
   }
   static Future<User?> currentUser() async {
     User? user;
+    var refresh = null;
     final prefs = await SharedPreferences.getInstance();
+    if(prefs.getString("refresh") != null){
+      refresh = prefs.getString("refresh");
+    }
     final response = await http.get(
       Uri.parse('http://flutterapp.pythonanywhere.com/accounts/auth/users/me/'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        "Authorization": "Bearer "+prefs.getString("refresh")!
+        "Authorization": "Bearer "+refresh.toString()
       }
     );
     if (response.statusCode == 200) {
@@ -199,14 +223,18 @@ class APIHelper {
     return user;
   }
   static Future<void> logout() async {
+    var refresh = null;
     final prefs = await SharedPreferences.getInstance();
+    if(prefs.getString("refresh") != null){
+      refresh = prefs.getString("refresh");
+    }
     http.post(
       Uri.parse('http://flutterapp.pythonanywhere.com/accounts/auth/logout/'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        "Authorization": "Bearer "+prefs.getString("refresh")!
+        "Authorization": "Bearer "+refresh.toString()
       },
-      body: jsonEncode({"refresh": prefs.getString("refresh")!}),
+      body: jsonEncode({"refresh": refresh}),
     );
     prefs.setString("refresh", "");
   }
@@ -215,12 +243,17 @@ class APIHelper {
   //Like methods
   static Future<List<Like>> getLikes() async {
     List<Like> likes = [];
+
+    var refresh = null;
     final prefs = await SharedPreferences.getInstance();
+    if(prefs.getString("refresh") != null){
+      refresh = prefs.getString("refresh");
+    }
     final response = await http.get(
       Uri.parse('http://flutterapp.pythonanywhere.com/blogs/like/'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        "Authorization": "Bearer "+prefs.getString("refresh")!
+        "Authorization": "Bearer "+refresh.toString()
       },
     );
     if (response.statusCode == 200) {
@@ -232,12 +265,17 @@ class APIHelper {
     return likes;
   }
   static createOrDeleteLike(Like like) async {
+
+    var refresh = null;
     final prefs = await SharedPreferences.getInstance();
+    if(prefs.getString("refresh") != null){
+      refresh = prefs.getString("refresh");
+    }
     http.post(
       Uri.parse('http://flutterapp.pythonanywhere.com/blogs/like/'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        "Authorization": "Bearer "+prefs.getString("refresh")!
+        "Authorization": "Bearer "+refresh.toString()
       },
       body: jsonEncode(like.toJson()),
     );
@@ -247,12 +285,17 @@ class APIHelper {
   //Love methods
   static Future<List<Article>> getUserFavoris() async {
     List<Article> loves = [];
+
+    var refresh = null;
     final prefs = await SharedPreferences.getInstance();
+    if(prefs.getString("refresh") != null){
+      refresh = prefs.getString("refresh");
+    }
     final response = await http.get(
       Uri.parse('http://flutterapp.pythonanywhere.com/blogs/get_user_favoris/'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        "Authorization": "Bearer "+prefs.getString("refresh")!
+        "Authorization": "Bearer "+refresh.toString()
       },
     );
     if (response.statusCode == 200) {
@@ -264,12 +307,17 @@ class APIHelper {
     return loves;
   }
   static createOrDeleteLove(Love love) async {
+
+    var refresh = null;
     final prefs = await SharedPreferences.getInstance();
+    if(prefs.getString("refresh") != null){
+      refresh = prefs.getString("refresh");
+    }
     http.post(
       Uri.parse('http://flutterapp.pythonanywhere.com/blogs/love/'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        "Authorization": "Bearer "+prefs.getString("refresh")!
+        "Authorization": "Bearer "+refresh.toString()
       },
       body: jsonEncode(love.toJson()),
     );
