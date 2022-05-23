@@ -10,6 +10,11 @@ class Start extends StatefulWidget {
 class _StartState extends State<Start> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: Center(
+        child: Container(child: Image.asset('assets/images/logo.png',),),
+      ),
+    );
   }
 }
