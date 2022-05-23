@@ -24,7 +24,7 @@ class User {
     data['name'] = this.name;
     data['image'] = this.image;
     data['password'] = this.password;
-    data['re_password'] = this.re_password;
+    data['re_password'] = this.password;
     return data;
   }
 }

@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'package:blog/models/article.dart';
 import 'package:blog/models/category.dart';
 import 'package:blog/models/comment.dart';
+import 'package:blog/models/like.dart';
+import 'package:blog/models/love.dart';
 import 'package:blog/models/user.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -21,11 +23,6 @@ class APIHelper {
       throw Exception('Failed to load categories');
     }
     return categories;
-  }
-  static Category getCategoryById(int id){
-    Category category = Category();
-    
-    return category;
   }
 
 
@@ -86,28 +83,42 @@ class APIHelper {
     }
     return article;
   }
-  static List<Article> getArticlesByCategory(Category category){
-    List<Article> articles = [];
-    return articles;
-  }
 
 
   //Comment methods
-  static void createComment(Comment comment){
+  static Future<void> createComment(Comment comment) async {
+    final prefs = await SharedPreferences.getInstance();
+    http.post(
+      Uri.parse('http://flutterapp.pythonanywhere.com/blogs/comment/'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        "Authorization": "Bearer "+prefs.getString("refresh")!
+      },
+      body: jsonEncode(comment.toJson()),
+    );
   }
-  static List<Comment> getCommentsByArticle(Article article){
+  static Future<List<Comment>> getCommentsByArticle(Article article) async {
     List<Comment> comments = [];
+    final response = await http.post(
+      Uri.parse('http://flutterapp.pythonanywhere.com/blogs/get_article_comments/'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8'
+      },
+      body: jsonEncode({"article_id": article.id}),
+    );
+    if (response.statusCode == 200) {
+      var results = json.decode(response.body);
+      for(var item in results){
+        comments.add(Comment.fromJson(item));
+      }
+    } else {
+      throw Exception('Failed to load comments');
+    }
     return comments;
-  }
-  static int getCommentsCountByArticle(Article article){
-    return 0;
   }
 
 
   //User methods
-  static createUser(User user){
-
-  }
   static User getUserById(int id){
     User user = User();
     return user;
@@ -125,10 +136,23 @@ class APIHelper {
       var result = json.decode(response.body);
       prefs.setString("refresh", result['refresh']);
     } else {
-      throw Exception('Failed to load articles');
+      throw Exception('Failed to connect the user');
     }
   }
-  //this method returns the user if he is connected, otherwise it returns false
+  static signup(User user) async {
+    final response = await http.post(
+      Uri.parse('http://flutterapp.pythonanywhere.com/accounts/auth/users/me/'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8'
+      },
+      body: jsonEncode(user.toJson()),
+    );
+    if (response.statusCode == 200) {
+      //alert the user to check it mail
+    } else {
+      throw Exception('Failed to register the user');
+    }
+  }
   static Future<User?> currentUser() async {
     User? user;
     final prefs = await SharedPreferences.getInstance();
@@ -160,14 +184,70 @@ class APIHelper {
 
 
   //Like methods
-  static int getLikesCountByArticle(Article article){
-    return 0;
+  static Future<List<Like>> getLikes() async {
+    List<Like> likes = [];
+    final prefs = await SharedPreferences.getInstance();
+    final response = await http.get(
+      Uri.parse('http://flutterapp.pythonanywhere.com/blogs/like/'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        "Authorization": "Bearer "+prefs.getString("refresh")!
+      },
+    );
+    if (response.statusCode == 200) {
+      var results = json.decode(response.body);
+      for(var item in results){
+        likes.add(Like.fromJson(item));
+      }
+    } else {
+      throw Exception('Failed to load likes');
+    }
+    return likes;
+  }
+  static createOrDeleteLike(Like like) async {
+    final prefs = await SharedPreferences.getInstance();
+    http.post(
+      Uri.parse('http://flutterapp.pythonanywhere.com/blogs/like/'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        "Authorization": "Bearer "+prefs.getString("refresh")!
+      },
+      body: jsonEncode(like.toJson()),
+    );
   }
 
 
   //Love methods
-  static int getLovesCountByArticle(Article article){
-    return 0;
+  static Future<List<Article>> getUserFavoris() async {
+    List<Article> loves = [];
+    final prefs = await SharedPreferences.getInstance();
+    final response = await http.get(
+      Uri.parse('http://flutterapp.pythonanywhere.com/blogs/get_user_favoris/'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        "Authorization": "Bearer "+prefs.getString("refresh")!
+      },
+    );
+    if (response.statusCode == 200) {
+      var results = json.decode(response.body);
+      for(var item in results){
+        loves.add(Article.fromJson(item));
+      }
+    } else {
+      throw Exception('Failed to load likes');
+    }
+    return loves;
+  }
+  static createOrDeleteLove(Love love) async {
+    final prefs = await SharedPreferences.getInstance();
+    http.post(
+      Uri.parse('http://flutterapp.pythonanywhere.com/blogs/love/'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        "Authorization": "Bearer "+prefs.getString("refresh")!
+      },
+      body: jsonEncode(love.toJson()),
+    );
   }
 
 }

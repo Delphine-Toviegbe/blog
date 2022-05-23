@@ -7,6 +7,8 @@ class Article {
   List<dynamic>? content;
   int? user;
   int? category;
+  int? like;
+  int? love;
 
   Article({this.id, this.publishDate, this.title, this.content, this.user, this.category});
 
@@ -17,6 +19,8 @@ class Article {
     content = jsonDecode(json['content']);
     user = json['user']['id'];
     category = json['category']['id'];
+    like = json['loves_likes']['like'];
+    love = json['loves_likes']['love'];
   }
 
   Map<String, dynamic> toJson() {
