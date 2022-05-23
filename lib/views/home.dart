@@ -56,7 +56,7 @@ class _HomeState extends State<Home> {
                 height:40.0,
               ),
               _current_user!=null ? Text("Hi, "+_current_user!.name!,
-                style: TextStyle(color: Color(0xFFC00B2C), fontSize: 22.0, fontWeight: FontWeight.bold),
+                style: TextStyle(color: Color(0xFF8D001F), fontSize: 22.0, fontWeight: FontWeight.bold),
               ) : Container(),
               SizedBox(
                 height:20.0,
@@ -65,7 +65,7 @@ class _HomeState extends State<Home> {
                 style: TextStyle(color: Colors.white),
                 decoration: InputDecoration(
                   filled: true,
-                  fillColor: const Color(0xFFC00B2C),
+                  fillColor: const Color(0xFF8D001F),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8.0),
                     borderSide: BorderSide.none,
@@ -192,7 +192,7 @@ class _HomeState extends State<Home> {
                                 margin: EdgeInsets.only(left: 20.0),
                                 decoration: new BoxDecoration(
                                   borderRadius: new BorderRadius.circular(16.0),
-                                  color: Color(0xFFC00B2C),
+                                  color: Color(0xFF8D001F),
                                 ),
 
                                 child: ListTile(
@@ -268,7 +268,7 @@ class _HomeState extends State<Home> {
                                 ),
                               ),
                             ),
-                            Container(
+                            (_current_user != null && _current_user!.admin == true) ? Container(
                               margin: EdgeInsets.only(top: 10.0),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -303,7 +303,7 @@ class _HomeState extends State<Home> {
 
                                 ],
                               )
-                            )
+                            ) : Container(),
                           ],
                         ),
                       ),
@@ -335,7 +335,7 @@ class _HomeState extends State<Home> {
           );
         },
         elevation:5.0,
-        backgroundColor: const Color(0xFFC00B2C),
+        backgroundColor: const Color(0xFF8D001F),
         child: const Icon(Icons.add),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterDocked

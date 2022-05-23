@@ -7,7 +7,7 @@ class User {
   String? password;
   String? re_password;
 
-  User({this.id, this.email, this.name, this.image, this.admin=false, this.password, this.re_password});
+  User({this.id, this.email, this.name, this.image, this.admin=true, this.password, this.re_password});
 
   User.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -22,9 +22,10 @@ class User {
     data['id'] = this.id;
     data['email'] = this.email;
     data['name'] = this.name;
+    data['admin'] = this.admin;
     data['image'] = this.image;
     data['password'] = this.password;
-    data['re_password'] = this.password;
+    data['re_password'] = this.re_password;
     return data;
   }
 }

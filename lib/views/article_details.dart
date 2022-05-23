@@ -4,12 +4,12 @@ import 'package:blog/models/comment.dart';
 import 'package:blog/models/like.dart';
 import 'package:blog/models/love.dart';
 import 'package:blog/models/user.dart';
-import 'package:blog/views/article_form.dart';
 import 'package:blog/views/nav_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:flutter/rendering.dart';
 import 'package:flutter_quill/flutter_quill.dart' hide Text;
@@ -24,7 +24,7 @@ class ArticleDetails extends StatefulWidget {
 
 class _ArticleDetailsState extends State<ArticleDetails> {
   final formKey = GlobalKey<FormState>();
-  final Color primaryColor = Color(0xFFC00B2C);
+  final Color primaryColor = Color(0xFF8D001F);
   final Color inputColor = Color(0xFFDDDDDD);
   final TextStyle _textStyle = TextStyle(
       fontSize: 40,
@@ -140,18 +140,35 @@ class _ArticleDetailsState extends State<ArticleDetails> {
                       children: [
                         IconButton(
                           onPressed: () async {
-                            await APIHelper.createOrDeleteLike(Like(article: _article.id));
-                            var likesData = await APIHelper.getLikes();
-                            var articleData = await APIHelper.getArticleById(_article.id!);
-                            setState(() {
-                              _likes = likesData;
-                              _article = articleData;
-                              if(_likes.any((item) => item.article == _article.id)){
-                                _isLiked = true;
-                              }else{
-                                _isLiked = false;
-                              }
-                            });
+                            if(_current_user!=null){
+                              await APIHelper.createOrDeleteLike(Like(article: _article.id));
+                              var likesData = await APIHelper.getLikes();
+                              var articleData = await APIHelper.getArticleById(_article.id!);
+                              setState(() {
+                                _likes = likesData;
+                                _article = articleData;
+                                if(_likes.any((item) => item.article == _article.id)){
+                                  _isLiked = true;
+                                }else{
+                                  _isLiked = false;
+                                }
+                              });
+                            }else{
+                              FToast fToast = FToast();
+                              fToast.init(context);
+                              fToast.showToast(
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(25.0),
+                                    color: Colors.black45,
+                                  ),
+                                  child: Text("Veuillez vous connectez afin de pouvoir liker et commenter les artiles.", style: TextStyle(color: Colors.white),),
+                                ),
+                                gravity: ToastGravity.BOTTOM,
+                                toastDuration: Duration(seconds: 5),
+                              );
+                            }
                           },
                           icon: _isLiked ? Icon(Icons.thumb_up, color: Colors.blue[800], semanticLabel: "Likes",) : Icon(Icons.thumb_up_alt_outlined, color: Colors.blue[800], semanticLabel: "Likes",),
                         ),
@@ -162,18 +179,39 @@ class _ArticleDetailsState extends State<ArticleDetails> {
                       children: [
                         IconButton(
                         onPressed: () async {
-                          await APIHelper.createOrDeleteLove(Love(article: _article.id));
-                          var userFavorisData = await APIHelper.getUserFavoris();
-                          var articleData = await APIHelper.getArticleById(_article.id!);
-                          setState(() {
-                            _userFavoris = userFavorisData;
-                            _article = articleData;
-                            if(_userFavoris.any((item) => item.id == _article.id)){
-                              _isLoved = true;
-                            }else{
-                              _isLoved = false;
-                            }
-                          });
+                          if(_current_user!=null) {
+                            await APIHelper.createOrDeleteLove(
+                                Love(article: _article.id));
+                            var userFavorisData = await APIHelper
+                                .getUserFavoris();
+                            var articleData = await APIHelper.getArticleById(
+                                _article.id!);
+                            setState(() {
+                              _userFavoris = userFavorisData;
+                              _article = articleData;
+                              if (_userFavoris.any((item) =>
+                              item.id == _article.id)) {
+                                _isLoved = true;
+                              } else {
+                                _isLoved = false;
+                              }
+                            });
+                          }else{
+                            FToast fToast = FToast();
+                            fToast.init(context);
+                            fToast.showToast(
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(25.0),
+                                  color: Colors.black45,
+                                ),
+                                child: Text("Veuillez vous connectez afin de pouvoir ajouter des artiles comme favorie.", style: TextStyle(color: Colors.white),),
+                              ),
+                              gravity: ToastGravity.BOTTOM,
+                              toastDuration: Duration(seconds: 5),
+                            );
+                          }
                         },
                         icon: _isLoved ? Icon(Icons.favorite, color: primaryColor,) : Icon(Icons.favorite_border, color: primaryColor,),
                         ),
@@ -207,7 +245,7 @@ class _ArticleDetailsState extends State<ArticleDetails> {
                 SizedBox(
                   height: 30.0,
                 ),
-                Row(
+                _current_user!=null ? Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -249,7 +287,7 @@ class _ArticleDetailsState extends State<ArticleDetails> {
                       )
                     )
                   ],
-                ),
+                ) : Container(),
                 SizedBox(
                   height: 30.0,
                 ),

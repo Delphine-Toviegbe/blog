@@ -5,8 +5,10 @@ import 'package:blog/models/comment.dart';
 import 'package:blog/models/like.dart';
 import 'package:blog/models/love.dart';
 import 'package:blog/models/user.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class APIHelper {
 
@@ -139,18 +141,45 @@ class APIHelper {
       throw Exception('Failed to connect the user');
     }
   }
-  static signup(User user) async {
+  static signup(User user, dynamic context) async {
     final response = await http.post(
-      Uri.parse('http://flutterapp.pythonanywhere.com/accounts/auth/users/me/'),
+      Uri.parse('http://flutterapp.pythonanywhere.com/accounts/auth/users/'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8'
       },
       body: jsonEncode(user.toJson()),
     );
-    if (response.statusCode == 200) {
+    if (response.statusCode == 201) {
       //alert the user to check it mail
+      FToast fToast = FToast();
+      fToast.init(context);
+      fToast.showToast(
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(25.0),
+            color: Colors.black,
+          ),
+          child: Text("Veuillez vérifier votre boîte mail pour confirmer votre compte ( vérifiez votre spam dans le cas échéant ). Notez que nous ne disposons pas d'un serveur assez rapide, donc quand vous allez cliquer sur le lien de validation dans votre mail, veuillez patienter autant que possible jusqu'à reçevoir un second mail vous notifiant que votre compte a été validé.", style: TextStyle(color: Colors.white),),
+        ),
+        gravity: ToastGravity.BOTTOM,
+        toastDuration: Duration(seconds: 60),
+      );
     } else {
-      throw Exception('Failed to register the user');
+      FToast fToast = FToast();
+      fToast.init(context);
+      fToast.showToast(
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(25.0),
+            color: Colors.black,
+          ),
+          child: Text(response.body, style: TextStyle(color: Colors.red),),
+        ),
+        gravity: ToastGravity.BOTTOM,
+        toastDuration: Duration(seconds: 5),
+      );
     }
   }
   static Future<User?> currentUser() async {
@@ -199,8 +228,6 @@ class APIHelper {
       for(var item in results){
         likes.add(Like.fromJson(item));
       }
-    } else {
-      throw Exception('Failed to load likes');
     }
     return likes;
   }
@@ -233,8 +260,6 @@ class APIHelper {
       for(var item in results){
         loves.add(Article.fromJson(item));
       }
-    } else {
-      throw Exception('Failed to load likes');
     }
     return loves;
   }

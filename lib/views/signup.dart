@@ -1,3 +1,6 @@
+import 'package:blog/controllers/api_helper.dart';
+import 'package:blog/models/user.dart';
+import 'package:blog/views/home.dart';
 import 'package:blog/views/nav_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:blog/views/login.dart';
@@ -16,6 +19,10 @@ class _SignupState extends State<Signup> {
   final _usernameController = new TextEditingController();
   String _password = '';
   bool _isObscure = true;
+
+  void _register(User user) async {
+    await APIHelper.signup(user, context);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,9 +49,9 @@ class _SignupState extends State<Signup> {
                           children: <Widget>[
                             Container(
                               decoration: BoxDecoration(
-                                  color: const Color(0xFFC00B2C),
+                                  color: const Color(0xFF8D001F),
                                   border: Border.all(
-                                      color: const Color(0xFFC00B2C)),
+                                      color: const Color(0xFF8D001F)),
                                   borderRadius: BorderRadius.only(
                                       topRight: Radius.circular(30),
                                       topLeft: Radius.circular(35))
@@ -151,16 +158,20 @@ class _SignupState extends State<Signup> {
                                             shape: RoundedRectangleBorder(
                                                 borderRadius: BorderRadius.circular(10)
                                             ),
-                                            primary: const Color(0xFFC00B2C),
+                                            primary: const Color(0xFF8D001F),
                                             minimumSize: const Size.fromHeight(50),
 
                                           ),
                                           onPressed: (){
                                             if(_formKey.currentState!.validate()){
-                                              /* Appelle une méthode Dara*/
+                                              _register(User(name: _usernameController.text,email: _emailController.text, password: _password, re_password: _password));
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(builder: (context) => Home()),
+                                              );
                                             }
                                           },
-                                          child: Text("Login")
+                                          child: Text("Register")
 
                                       )
 
@@ -171,7 +182,7 @@ class _SignupState extends State<Signup> {
                                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                     children: <Widget>[
                                       Text('Forgot your pasword'),
-                                      Text('Reset here', style: TextStyle(color: Color(0xFFC00B2C)),)
+                                      Text('Reset here', style: TextStyle(color: Color(0xFF8D001F)),)
                                     ],
                                   ),
                                   Container(

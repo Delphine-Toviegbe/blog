@@ -47,9 +47,9 @@ class _LoginState extends State<Login> {
                           children: <Widget>[
                             Container(
                               decoration: BoxDecoration(
-                                  color: const Color(0xFFC00B2C),
+                                  color: const Color(0xFF8D001F),
                                   border: Border.all(
-                                      color: const Color(0xFFC00B2C)),
+                                      color: const Color(0xFF8D001F)),
                                   borderRadius: BorderRadius.only(
                                       topRight: Radius.circular(30),
                                       topLeft: Radius.circular(35))
@@ -144,7 +144,7 @@ class _LoginState extends State<Login> {
                                             shape: RoundedRectangleBorder(
                                                 borderRadius: BorderRadius.circular(10)
                                             ),
-                                            primary: const Color(0xFFC00B2C),
+                                            primary: const Color(0xFF8D001F),
                                             minimumSize: const Size.fromHeight(50),
 
                                           ),
@@ -168,7 +168,7 @@ class _LoginState extends State<Login> {
                                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                     children: <Widget>[
                                       Text('Forgot your pasword'),
-                                      Text('Reset here', style: TextStyle(color: Color(0xFFC00B2C)),)
+                                      Text('Reset here', style: TextStyle(color: Color(0xFF8D001F)),)
                                     ],
                                   ),
                                   Container(

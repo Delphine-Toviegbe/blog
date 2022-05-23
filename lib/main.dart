@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSwatch().copyWith(
-          primary: const Color(0xFFC00B2C),
+          primary: const Color(0xFF8D001F),
         ),
       ),
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
@@ -41,10 +41,6 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   dynamic _page = Start();
 
-  void _login() async {
-    await APIHelper.login(User(email: "admin@gmail.com", password: "admin"));
-  }
-
   @override
   void initState() {
     // TODO: implement initState
@@ -54,7 +50,6 @@ class _MyHomePageState extends State<MyHomePage> {
         _page = Start1();
       });
     });
-    _login();
   }
   @override
   Widget build(BuildContext context) {

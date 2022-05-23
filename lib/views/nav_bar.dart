@@ -16,7 +16,7 @@ class NavBar extends StatefulWidget {
 }
 
 class _NavBarState extends State<NavBar> {
-  final Color primaryColor = Color(0xFFC00B2C);
+  final Color primaryColor = Color(0xFF8D001F);
   final Color inputColor = Color(0xFFDDDDDD);
   User? _current_user;
   bool _isLoading = true;

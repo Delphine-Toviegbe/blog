@@ -165,7 +165,7 @@ class _Start1State extends State<Start1> {
                               },
                               child: Container(
                                 decoration: BoxDecoration(
-                                    color: const Color(0xFFC00B2C),
+                                    color: const Color(0xFF8D001F),
                                     borderRadius: BorderRadius.circular(10),
                                     boxShadow: [
                                       BoxShadow(
